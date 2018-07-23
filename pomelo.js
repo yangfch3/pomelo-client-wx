@@ -1701,5 +1701,3 @@ pomeloClient_require.alias('pomelonode-pomelo-jsclient-websocket/lib/pomelo-clie
 
 pomeloClient_require('boot')
 window.Pomelo = localRoot.Pomelo
-
-module.exports = localRoot.Pomelo
