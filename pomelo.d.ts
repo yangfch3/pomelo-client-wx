@@ -12,7 +12,6 @@ declare interface InitParams {
 
 declare interface InitByUrlParams {
   log: false
-  url: string
   reconnect?: boolean,
   maxReconnectAttempts?: number,
   reconnectionDelay?: number
@@ -30,7 +29,7 @@ declare class Pomelo {
 
   init(params: InitParams, cb: EventCallBack): this
 
-  initByUrl(params: InitByUrlParams, cb: EventCallBack): this
+  initByUrl(url: string, params: InitByUrlParams, cb: EventCallBack): this
 
   disconnect(): void
   request(route: string, msg: object, cb: EventCallBack): void
