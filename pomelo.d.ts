@@ -1,9 +1,9 @@
 declare interface InitParams {
-  log: false
   host: string
   port?: number
-  scheme: 'ws'
   path?: string
+  scheme?: 'ws'
+  log?: false
 
   reconnect?: boolean,
   maxReconnectAttempts?: number,
@@ -11,7 +11,7 @@ declare interface InitParams {
 }
 
 declare interface InitByUrlParams {
-  log: false
+  log?: false
   reconnect?: boolean,
   maxReconnectAttempts?: number,
   reconnectionDelay?: number
