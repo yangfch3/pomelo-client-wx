@@ -1,9 +1,9 @@
 declare interface InitParams {
+  log?: boolean
   host: string
   port?: number
+  scheme?: string
   path?: string
-  scheme?: 'ws'
-  log?: false
 
   reconnect?: boolean,
   maxReconnectAttempts?: number,
@@ -11,14 +11,23 @@ declare interface InitParams {
 }
 
 declare interface InitByUrlParams {
-  log?: false
+  log?: boolean
   reconnect?: boolean,
   maxReconnectAttempts?: number,
   reconnectionDelay?: number
 }
 
+declare interface IRequestRes {
+  code: number,
+  msg?: string,
+  data?: {
+    [propName: string]: any
+  }
+  [propName: string]: any
+}
+
 declare interface EventCallBack {
-  (eventObj?: object): void
+  (eventObj?: any): void
 }
 
 declare class Pomelo {
@@ -32,14 +41,14 @@ declare class Pomelo {
   initByUrl(url: string, params: InitByUrlParams, cb: EventCallBack): this
 
   disconnect(): void
-  request(route: string, msg: object, cb: EventCallBack): void
-  notify(route: string, msg: object): void
+  request(route: string, msg: any, cb: (res: IRequestRes) => void): void
+  notify(route: string, msg: any): void
 
   on(eventName: string, cb: EventCallBack): this
   once(eventName: string, cb: EventCallBack): this
   off(eventName: string): this
-  hasListeners(eventName: string): Array<EventCallBack>
-  listeners(eventName: string): Array<EventCallBack>
+  hasListeners(eventName: string): Array<(res: IRequestRes) => void>
+  listeners(eventName: string): Array<(res: IRequestRes) => void>
   removeListener(eventName: string): this
   removeAllListeners(eventName: string): this
 }

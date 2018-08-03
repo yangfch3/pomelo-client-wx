@@ -1403,11 +1403,20 @@ pomeloClient_require.register('pomelonode-pomelo-jsclient-websocket/lib/pomelo-c
     pro.initWebSocket = function (url, cb) {
       this.log && console.info('connect to ' + url)
 
-      this.socket = wx.connectSocket({url: url}) // eslint-disable-line
-      this.socket.onOpen(onopen.bind(this))
-      this.socket.onMessage(onmessage.bind(this, cb))
-      this.socket.onError(onerror.bind(this))
-      this.socket.onClose(onclose.bind(this))
+      if (typeof wx === 'object' && wx.connectSocket) {
+        this.socket = wx.connectSocket({url: url}) // eslint-disable-line
+        this.socket.onOpen(onopen.bind(this))
+        this.socket.onMessage(onmessage.bind(this, cb))
+        this.socket.onError(onerror.bind(this))
+        this.socket.onClose(onclose.bind(this))
+      } else {
+        this.socket = new WebSocket(url) // eslint-disable-line
+        this.socket.binaryType = 'arraybuffer'
+        this.socket.onopen = onopen.bind(this)
+        this.socket.onmessage = onmessage.bind(this, cb)
+        this.socket.onerror = onerror.bind(this)
+        this.socket.onclose = onclose.bind(this)
+      }
     }
 
     pro.disconnect = function () {
@@ -1484,7 +1493,11 @@ pomeloClient_require.register('pomelonode-pomelo-jsclient-websocket/lib/pomelo-c
 
     pro.send = function (packet) {
       if (this.socket && this.socket.readyState === WebSocket.OPEN) { // eslint-disable-line
-        this.socket.send({data: packet.buffer})
+        if (typeof wx === 'object' && wx.connectSocket) {
+          this.socket.send({data: packet.buffer})
+        } else {
+          this.socket.send(packet.buffer)
+        }
       } else {
         this.log && console.warn('socket is not open: readyState ' + this.socket.readyState)
       }
