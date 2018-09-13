@@ -1509,7 +1509,8 @@ pomeloClient_require.register('pomelonode-pomelo-jsclient-websocket/lib/pomelo-c
           this.socket.send(packet.buffer)
         }
       } else {
-        this.log && console.warn('socket is not open: readyState ' + this.socket.readyState)
+        // -1 表示 socket 还未建立
+        this.log && console.warn('socket is not open: readyState ' + (this.socket ? this.socket.readyState : -1))
       }
     }
 
